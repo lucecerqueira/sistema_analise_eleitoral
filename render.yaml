@@ -2,11 +2,5 @@ services:
   - type: web
     name: sistema-analise-eleitoral
     env: python
-    plan: free
-    buildCommand: |
-      apt-get update && apt-get install -y tesseract-ocr tesseract-ocr-por
-      pip install -r requirements.txt
-      python manage.py collectstatic --noinput
-      python manage.py migrate
-      python ingestao_pdf.py
-    startCommand: gunicorn sistema_analise_eleitoral.wsgi:application
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate"
+    startCommand: "gunicorn sistema_analise_eleitoral.wsgi:application"
