@@ -1,13 +1,12 @@
 django
 djangorestframework
-scikit-learn
+gunicorn
+whitenoise
 pandas
+scikit-learn
 numpy
 pyphen
 reportlab
 pdfplumber
-pytesseract
 pillow
 nltk
-gunicorn
-whitenoise
