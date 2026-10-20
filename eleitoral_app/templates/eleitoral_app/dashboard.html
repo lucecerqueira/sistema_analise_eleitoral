@@ -1,0 +1,71 @@
+{% extends 'eleitoral_app/base.html' %}
+{% block content %}
+<div class="mb-8 font-mono">
+    <h1 class="text-3xl font-bold text-slate-100">Painel Consolidado de Análise Eleitoral</h1>
+    <p class="text-sm text-slate-400 mt-1">Processamento de Linguagem Natural (PLN) e Mapeamento dos Programas Oficiais de Governo.</p>
+</div>
+
+<!-- <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 font-mono">
+    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+        <p class="text-[10px] text-slate-400 uppercase">Método 1 (Léxica)</p>
+        <p class="text-2xl font-black mt-1 text-sky-400">{{ total_m1 }} Itens</p>
+    </div>
+    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+        <p class="text-[10px] text-slate-400 uppercase">Método 2 (Semântica)</p>
+        <p class="text-2xl font-black mt-1 text-emerald-400">{{ total_m2 }} Itens</p>
+    </div>
+    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+        <p class="text-[10px] text-slate-400 uppercase">Método 3 (RAG)</p>
+        <p class="text-2xl font-black mt-1 text-purple-400">{{ total_m3 }} Sínteses</p>
+    </div>
+    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+        <p class="text-[10px] text-slate-400 uppercase">Método 4 (Tópicos)</p>
+        <p class="text-2xl font-black mt-1 text-amber-400">{{ total_m4 }} Clusters</p>
+    </div>
+</div> -->
+
+<div class="mb-8 font-mono">
+    <h2 class="text-xl font-bold text-slate-200 mb-4">Mapa de Conhecimento Dinâmico (Trigramas Extraídos do PDF Real):</h2>
+    <div class="map-wrapper">
+        {% for cand_nome, info in dados_mapas.items %}
+        <div class="candidate-card" style="border-top-color: {{ info.cor }};">
+            <div class="candidate-title" style="color: {{ info.cor }};">Mapa — {{ cand_nome }}</div>
+            <div class="nodes-container">
+                {% for eixo_nome, subnoes in info.eixos.items %}
+                <div class="axis-box">
+                    <div class="axis-header" style="color: {{ info.cor }};">{{ eixo_nome }}</div>
+                    <ul class="subnode-list">
+                        {% for item in subnoes %}
+                        <li class="subnode-item"><span class="bullet-icon" style="color: {{ info.cor }};"></span>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- <h2 class="text-xl font-bold font-mono text-slate-200 mb-4">Métricas Globais de Legibilidade (Flesch-Szigriszt):</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono mb-8">
+    {% for m in metricas_legibilidade %}
+    <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold" style="color: {{ m.candidato.cor_tema }}">{{ m.candidato.nome }}</h3>
+            <span class="text-xl font-bold bg-slate-950 px-3 py-1 rounded-xl border border-slate-800 text-amber-400">{{ m.score_ifsz }} pts</span>
+        </div>
+        <div class="space-y-2 text-xs text-slate-300">
+            <div class="flex justify-between"><span>Classificação:</span> <b>{{ m.classificacao }}</b></div>
+            <div class="flex justify-between"><span>Média Palavras/Frase:</span> <b>{{ m.media_palavras_frase }}</b></div>
+            <div class="flex justify-between"><span>Total de Palavras:</span> <b>{{ m.total_palavras }}</b></div>
+        </div>
+    </div>
+    {% endfor %}
+</div> -->
+
+<div class="flex justify-center space-x-4 font-mono">
+    <a href="{% url 'cartoes_resultados' %}" class="bg-sky-600 hover:bg-sky-500 text-slate-950 font-bold px-6 py-3 rounded-xl uppercase shadow-lg transition">Acessar Cartões em Lotes →</a>
+    <a href="{% url 'explicacao_metodos' %}" class="bg-purple-900 hover:bg-purple-800 text-purple-200 font-bold px-6 py-3 rounded-xl uppercase border border-purple-700 shadow-lg transition">Documentação dos Métodos →</a>
+</div>
+{% endblock %}

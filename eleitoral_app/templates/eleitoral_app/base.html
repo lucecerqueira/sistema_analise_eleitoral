@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Eleitoral - Planos Oficiais</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        .map-wrapper { font-family: sans-serif; display: flex; flex-direction: row; gap: 20px; background: #0f172a; padding: 20px; border-radius: 16px; border: 1px solid #1e293b; overflow-x: auto; }
+        .candidate-card { flex: 1; min-width: 320px; background: #182234; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-top: 6px solid #333; display: flex; flex-direction: column; }
+        .candidate-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #283548; font-family: monospace; }
+        .nodes-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+        .axis-box { background: #0f172a; border-radius: 8px; padding: 10px; border: 1px solid #283548; }
+        .axis-header { font-weight: bold; font-size: 11px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; font-family: monospace; }
+        ul.subnode-list { list-style: none !important; padding-left: 0 !important; margin: 0 !important; }
+        ul.subnode-list li.subnode-item { font-size: 11px; color: #cbd5e1; padding: 4px 0; border-bottom: 1px dashed #334155; display: flex; align-items: center; }
+        ul.subnode-list li.subnode-item:last-child { border-bottom: none; }
+        .bullet-icon { display: inline-block; width: 6px; height: 6px; background-color: currentColor; border-radius: 50%; margin-right: 8px; flex-shrink: 0; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 flex flex-col min-h-screen font-sans">
+    <nav class="bg-slate-900 border-b border-slate-800 text-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <span class="text-md font-bold font-mono text-sky-400">Análise Eleitoral 2026</span>
+                <div class="flex items-center space-x-2 text-xs font-semibold uppercase font-mono">
+                    <a href="{% url 'dashboard' %}" class="px-3 py-1.5 rounded-lg hover:bg-slate-800 transition">Visão Geral & Mapa</a>
+                    <a href="{% url 'cartoes_resultados' %}" class="px-3 py-1.5 rounded-lg bg-sky-950 text-sky-300 border border-sky-800 hover:bg-sky-900 transition">Explorador de Cartões</a>
+                    <a href="{% url 'explicacao_metodos' %}" class="px-3 py-1.5 rounded-lg bg-purple-950 text-purple-300 border border-purple-800 hover:bg-purple-900 transition">Documentação dos Métodos</a>
+                </div>
+            </div>
+            <div class="text-xs bg-slate-800 px-3 py-1 rounded-lg border border-slate-700 text-slate-300 font-mono">
+                Painel Público
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-8 flex-grow w-full">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-slate-900 border-t border-slate-800 py-4 text-center text-xs text-slate-500 font-mono">
+        Plataforma Científica de Análise de Programas de Governo &copy; 2026
+    </footer>
+</body>
+</html>

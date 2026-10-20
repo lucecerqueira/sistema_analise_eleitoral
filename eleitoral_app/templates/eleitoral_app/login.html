@@ -1,0 +1,18 @@
+{% extends 'eleitoral_app/base.html' %}
+{% block content %}
+<div class="max-w-md mx-auto mt-12 bg-slate-900 p-8 rounded-2xl border border-slate-800 shadow-2xl font-mono">
+    <h2 class="text-2xl font-bold text-slate-100 mb-6 text-center">Acesso à Plataforma</h2>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div>
+            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Usuário</label>
+            <input type="text" name="username" class="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-lg p-3 text-sm" required>
+        </div>
+        <div>
+            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Senha</label>
+            <input type="password" name="password" class="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-lg p-3 text-sm" required>
+        </div>
+        <button type="submit" class="w-full bg-sky-600 hover:bg-sky-500 text-slate-950 font-bold p-3 rounded-lg text-sm uppercase transition">Entrar</button>
+    </form>
+</div>
+{% endblock %}

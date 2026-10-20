@@ -1,0 +1,13 @@
+django
+djangorestframework
+scikit-learn
+pandas
+numpy
+pyphen
+reportlab
+pdfplumber
+pytesseract
+pillow
+nltk
+gunicorn
+whitenoise

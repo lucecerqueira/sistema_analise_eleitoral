@@ -1,0 +1,120 @@
+{% extends 'eleitoral_app/base.html' %}
+{% block content %}
+<div class="mb-6 font-mono" x-data="{ mostrarExplicacao: false }">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold text-sky-400">Cartões Comparativos (10 Eixos Temáticos)</h1>
+        <button @click="mostrarExplicacao = !mostrarExplicacao" class="bg-purple-950 hover:bg-purple-900 text-purple-300 border border-purple-800 text-xs font-bold px-4 py-2 rounded-xl transition">
+            <span x-text="mostrarExplicacao ? 'Ocultar Explicação do Método' : 'O que faz este método?'"></span>
+        </button>
+    </div>
+
+    <div x-show="mostrarExplicacao" x-transition class="bg-slate-900 border border-purple-800 rounded-2xl p-6 mb-6 text-xs text-slate-300 space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-purple-400 uppercase">{{ explicacao_metodo_ativo.nome }}</h3>
+            <span class="text-[10px] bg-purple-950 text-purple-300 px-2 py-0.5 rounded border border-purple-800 font-mono">{{ explicacao_metodo_ativo.subtitulo }}</span>
+        </div>
+        <p class="text-slate-200 leading-relaxed">{{ explicacao_metodo_ativo.descricao }}</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <b class="text-sky-400 block mb-1 uppercase">Como funciona:</b>
+                <p class="whitespace-pre-line text-slate-400">{{ explicacao_metodo_ativo.como_funciona }}</p>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <b class="text-amber-400 block mb-1 uppercase">Quando utilizar:</b>
+                <p class="text-slate-400">{{ explicacao_metodo_ativo.quando_usar }}</p>
+                <b class="text-emerald-400 block mt-2 mb-1 uppercase">Métrica principal:</b>
+                <p class="text-slate-400">{{ explicacao_metodo_ativo.metricas }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-3 mb-6">
+        <a href="?metodo=METODO_1&qtd={{ qtd_selecionada }}" class="px-4 py-2 rounded-xl text-xs font-bold transition {% if metodo_selecionado == 'METODO_1' %}bg-sky-600 text-slate-950{% else %}bg-slate-900 text-slate-400 hover:bg-slate-800{% endif %}">
+            Método 1: Busca Léxica
+        </a>
+        <a href="?metodo=METODO_2&qtd={{ qtd_selecionada }}" class="px-4 py-2 rounded-xl text-xs font-bold transition {% if metodo_selecionado == 'METODO_2' %}bg-sky-600 text-slate-950{% else %}bg-slate-900 text-slate-400 hover:bg-slate-800{% endif %}">
+            Método 2: Busca Semântica
+        </a>
+        <a href="?metodo=METODO_3&qtd={{ qtd_selecionada }}" class="px-4 py-2 rounded-xl text-xs font-bold transition {% if metodo_selecionado == 'METODO_3' %}bg-sky-600 text-slate-950{% else %}bg-slate-900 text-slate-400 hover:bg-slate-800{% endif %}">
+            Método 3: RAG (Contexto)
+        </a>
+        <!-- <a href="?metodo=METODO_4&qtd={{ qtd_selecionada }}" class="px-4 py-2 rounded-xl text-xs font-bold transition {% if metodo_selecionado == 'METODO_4' %}bg-sky-600 text-slate-950{% else %}bg-slate-900 text-slate-400 hover:bg-slate-800{% endif %}">
+            Método 4: Agrupamento Temático
+        </a> -->
+    </div>
+
+    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-wrap justify-between items-center gap-4 text-xs">
+        <div class="flex items-center space-x-2">
+            <span class="text-slate-400">Ativo: <b>{{ metodo_nome }}</b></span>
+            <span class="bg-slate-800 text-sky-400 px-2.5 py-1 rounded-lg border border-slate-700"><b>{{ total_perguntas_exibidas }}</b> itens selecionados</span>
+        </div>
+
+        <form method="get" class="flex flex-wrap items-center gap-3">
+            <input type="hidden" name="metodo" value="{{ metodo_selecionado }}">
+            
+            <div>
+                <label class="text-slate-400 mr-1">Eixo Temático:</label>
+                <select name="eixo" onchange="this.form.submit()" class="bg-slate-950 border border-slate-800 text-slate-200 p-1.5 rounded-lg">
+                    <option value="">Todos os 10 Eixos</option>
+                    {% for ex in eixos_disponiveis %}
+                    <option value="{{ ex }}" {% if ex == eixo_selecionado %}selected{% endif %}>{{ ex }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="text-slate-400 mr-1">Exibir por Card:</label>
+                <select name="qtd" onchange="this.form.submit()" class="bg-slate-950 border border-slate-800 text-slate-200 p-1.5 rounded-lg">
+                    <option value="1" {% if qtd_selecionada == 1 %}selected{% endif %}>1 Pergunta</option>
+                    <option value="2" {% if qtd_selecionada == 2 %}selected{% endif %}>2 Perguntas</option>
+                    <option value="5" {% if qtd_selecionada == 5 %}selected{% endif %}>5 Perguntas</option>
+                    <option value="20" {% if qtd_selecionada == 20 %}selected{% endif %}>Todas as Perguntas</option>
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="flex flex-wrap justify-center gap-8">
+    {% for lote in lotes_cartoes %}
+    <div class="w-full max-w-[680px] bg-[#f2f2f7] p-4 rounded-[28px] border-[8px] border-[#1c1c1e] shadow-2xl text-slate-900 font-sans">
+        <div class="text-center text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-3">{{ metodo_nome }} • Lote {{ lote.intervalo }}</div>
+        
+        {% for item in lote.itens %}
+        <div class="bg-white rounded-2xl p-4 mb-3 shadow-sm">
+            <div class="flex justify-between items-center mb-1">
+                <span class="inline-block bg-sky-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md uppercase">
+                    {% if metodo_selecionado == 'METODO_4' %}Tópico {{ item.num }}{% else %}Pergunta {{ item.num }}{% endif %}
+                </span>
+                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{{ item.eixo }}</span>
+            </div>
+            
+            <div class="text-xs font-bold text-slate-900 mb-2">{{ item.titulo }}</div>
+            
+            {% if item.sintese and metodo_selecionado == 'METODO_3' %}
+            <div class="bg-indigo-50 rounded-lg p-2.5 text-[11px] text-slate-800 mb-3 border-l-4 border-indigo-500">
+                <b>Síntese Comparativa RAG:</b> {{ item.sintese|safe }}
+            </div>
+            {% endif %}
+
+            <!-- Disposição em 2 Colunas: Vermelho na Esquerda | Verde na Direita -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {% for r in item.respostas %}
+                <div class="bg-slate-50 rounded-xl p-3 border-l-4 flex flex-col justify-between" style="border-left-color: {{ r.candidato.cor_tema }}">
+                    <div>
+                        <div class="flex justify-between items-center text-[11px] font-bold mb-1" style="color: {{ r.candidato.cor_tema }}">
+                            <span>{{ r.candidato.nome }}</span>
+                            <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded-md">{{ r.relevancia_score }}</span>
+                        </div>
+                        <div class="text-[11px] text-slate-800 italic leading-snug">"{{ r.trecho_encontrado }}"</div>
+                    </div>
+                    <div class="text-[9px] text-slate-400 text-right mt-2">Parágrafo ID: {{ r.id_paragrafo }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
