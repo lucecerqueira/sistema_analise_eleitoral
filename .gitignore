@@ -1,6 +1,6 @@
 *.pyc
 __pycache__/
 # db.sqlite3
-media/planos_pdf/*.pdf
+# media/planos_pdf/*.pdf
 staticfiles/
 .env
